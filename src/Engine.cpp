@@ -1,11 +1,11 @@
 #include "Engine.h"
 #include <iostream>
-#include <glm/ext/matrix_clip_space.hpp>
-#include <glm/ext/matrix_float4x4.hpp>
-#include <glm/ext/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "../external/glm/glm/ext/matrix_clip_space.hpp"
+#include "../external/glm/glm/ext/matrix_float4x4.hpp"
+#include "../external/glm/glm/ext/matrix_transform.hpp"
+#include "../external/glm/glm/gtc/type_ptr.hpp"
 
-Engine::Engine() {
+Engine::Engine() : model(nullptr) {
     init();
     renderer = new Renderer();
     shader = new Shader("src/shaders/vertex_shader.glsl", "src/shaders/fragment_shader.glsl");
@@ -35,9 +35,9 @@ void Engine::init() {
 
 void Engine::render(const std::string& modelPath) {
     if (!model) {
-        model = new Model(modelPath); // Allocate Model instance
+        model = new Model(modelPath);
+        model->loadModel(modelPath); // Load model once
     }
-    model->loadModel(modelPath); // Load model
 
     // Render loop
     while (!glfwWindowShouldClose(window)) {

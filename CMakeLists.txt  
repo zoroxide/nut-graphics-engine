@@ -10,6 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Add the external libraries
 add_subdirectory(external/glfw)
 include_directories(external/glad/include)
+include_directories(external/glm)  # Include GLM
 
 # Add the source files
 set(SOURCES
@@ -17,7 +18,7 @@ set(SOURCES
     src/Shader.cpp
     src/Model.cpp
     src/Renderer.cpp
-    src/engine.cpp
+    src/Engine.cpp
 )
 
 # Create the executable
@@ -26,12 +27,12 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 # Link the libraries
 target_link_libraries(${PROJECT_NAME} glfw glad)
 
-# Optionally set the output directory for binaries
+# Optionally find and link OpenGL
+find_package(OpenGL REQUIRED)
+target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})
+
+# Set the output directory for binaries
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # Set include directories for your project
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/external/glad/include)
-
-# Optionally find and link OpenGL
-find_package(OpenGL REQUIRED)
-target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})
