@@ -1,8 +1,5 @@
 #include "Engine.h"
-#include "Shader.h"
-#include "Renderer.h"
-#include "Model.h"
-#include <bits/stdc++.h>
+#include <iostream>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_float4x4.hpp>
 #include <glm/ext/matrix_transform.hpp>
@@ -11,9 +8,12 @@
 Engine::Engine() {
     init();
     renderer = new Renderer();
+    shader = new Shader("src/shaders/vertex_shader.glsl", "src/shaders/fragment_shader.glsl");
 }
 
 Engine::~Engine() {
+    delete model; // Clean up model
+    delete shader;
     delete renderer;
     glfwTerminate();
 }
@@ -23,25 +23,21 @@ void Engine::init() {
         std::cerr << "Failed to initialize GLFW" << std::endl;
         exit(EXIT_FAILURE);
     }
-}
 
-void Engine::engine_draw(Shader shader)
-{
-    model->draw(shader);
-}
-
-void Engine::engine_load(const std::string& modelPath)
-{
-    
-    model->loadModel(modelPath);
+    window = glfwCreateWindow(800, 600, "OpenGL Engine", nullptr, nullptr);
+    if (!window) {
+        std::cerr << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
+        exit(EXIT_FAILURE);
+    }
+    glfwMakeContextCurrent(window);
 }
 
 void Engine::render(const std::string& modelPath) {
-    // Load model
-    engine_load(modelPath);
-
-    // Create shader
-    Shader shader("src/shaders/vertex_shader.glsl", "src/shaders/fragment_shader.glsl");
+    if (!model) {
+        model = new Model(modelPath); // Allocate Model instance
+    }
+    model->loadModel(modelPath); // Load model
 
     // Render loop
     while (!glfwWindowShouldClose(window)) {
@@ -52,13 +48,12 @@ void Engine::render(const std::string& modelPath) {
         glm::mat4 view = glm::lookAt(glm::vec3(0, 0, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
         glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 
-        // Activate shader and set uniforms
-        shader.use();
-        shader.setMat4("model", glm::value_ptr(modfl));
-        shader.setMat4("view", glm::value_ptr(view));
-        shader.setMat4("projection", glm::value_ptr(projection));
+        shader->use();
+        shader->setMat4("model", glm::value_ptr(modfl));
+        shader->setMat4("view", glm::value_ptr(view));
+        shader->setMat4("projection", glm::value_ptr(projection));
 
-        engine_draw(shader);
+        model->draw(*shader);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

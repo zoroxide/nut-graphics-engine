@@ -1,4 +1,3 @@
-
 #include "../external/tinyobjloader/tiny_obj_loader.h"
 #include "Model.h"
 #include <iostream>

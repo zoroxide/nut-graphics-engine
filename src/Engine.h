@@ -2,18 +2,19 @@
 #define ENGINE_H
 
 #include "Renderer.h"
+#include "Shader.h"
+#include "Model.h"
+#include "../external/glfw/include/GLFW/glfw3.h"
 
 class Engine {
 public:
     Engine();
     ~Engine();
     void render(const std::string& modelPath);
-    void engine_draw(Shader shader);
-    void engine_load(const std::string& modelPath);
 
 private:
-    Shader *shader = nullptr;
-    Model *model = nullptr;
+    Shader* shader = nullptr;
+    Model* model = nullptr; // Start as nullptr
     GLFWwindow* window;
     Renderer* renderer;
     void init();
