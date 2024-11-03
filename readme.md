@@ -16,7 +16,7 @@ The Nut Engine is a lightweight and modular graphics engine designed to facilita
 ## Project Structure
 
 ```
-OpenGL_Project/
+nut/
 ├── build/                   # Directory for build files
 ├── external/                # External libraries
 │   ├── glfw/                # GLFW library
@@ -62,7 +62,7 @@ To build the project, follow these steps:
    ```
 6. Run the application:
    ```bash
-   ./OpenGL_Project
+   ./output
    ```
 
 ## Usage
