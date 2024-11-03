@@ -50,19 +50,14 @@ To build the project, follow these steps:
 3. Create a build directory:
    ```bash
    mkdir build
-   cd build
    ```
-4. Run CMake to configure the project:
-   ```bash
-   cmake ..
-   ```
-5. Compile the project:
+4. Compile the project:
    ```bash
    make
    ```
-6. Run the application:
+5. Run the application:
    ```bash
-   ./output
+   build/app
    ```
 
 ## Usage
