@@ -4,18 +4,12 @@
 #include "../external/glm/glm/ext/matrix_float4x4.hpp"
 #include "../external/glm/glm/ext/matrix_transform.hpp"
 #include "../external/glm/glm/gtc/type_ptr.hpp"
+#include "../external/glad/include/glad/glad.h"
 
-Engine::Engine() : model(nullptr) {
+Engine::Engine() : model(nullptr), renderer(nullptr), shader(nullptr), window(nullptr) {
     init();
     renderer = new Renderer();
     shader = new Shader("src/shaders/vertex_shader.glsl", "src/shaders/fragment_shader.glsl");
-}
-
-Engine::~Engine() {
-    delete model; // Clean up model
-    delete shader;
-    delete renderer;
-    glfwTerminate();
 }
 
 void Engine::init() {
@@ -31,19 +25,24 @@ void Engine::init() {
         exit(EXIT_FAILURE);
     }
     glfwMakeContextCurrent(window);
+
+    // Load OpenGL functions using GLAD
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        std::cerr << "Failed to initialize GLAD" << std::endl;
+        exit(EXIT_FAILURE);
+    }
 }
 
 void Engine::render(const std::string& modelPath) {
     if (!model) {
         model = new Model(modelPath);
-        model->loadModel(modelPath); // Load model once
+        model->loadModel(modelPath);
     }
 
-    // Render loop
+    glEnable(GL_DEPTH_TEST);
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Set up matrices
         glm::mat4 modfl = glm::mat4(1.0f);
         glm::mat4 view = glm::lookAt(glm::vec3(0, 0, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
         glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);

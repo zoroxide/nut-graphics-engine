@@ -12,7 +12,7 @@ void Model::loadModel(const std::string& path) {
     std::vector<tinyobj::material_t> materials;
     std::string warn, err;
     if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, path.c_str())) {
-        std::cerr << "[NUT] : Failed to load model: " << warn << err << std::endl;
+        std::cerr << "[NUT DEBUG SERVICE] : Failed to load model: " << warn<< " " << err << std::endl;
         return;
     }
 
@@ -22,7 +22,7 @@ void Model::loadModel(const std::string& path) {
             vertices.push_back(attrib.vertices[3 * index.vertex_index + 1]);
             vertices.push_back(attrib.vertices[3 * index.vertex_index + 2]);
         }
-    }
+    } // O(n^3) ?
 
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);

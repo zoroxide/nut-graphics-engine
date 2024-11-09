@@ -9,6 +9,7 @@ LDFLAGS = -L./nut/external/glfw/build/src -lglfw -lGL -lGLU -lX11 -lpthread -lm 
 TARGET = build/app
 
 $(TARGET): $(SOURCES)
+	mkdir -p build
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SOURCES) $(LDFLAGS)
 
 clean:

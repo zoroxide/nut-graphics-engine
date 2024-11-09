@@ -1,26 +1,14 @@
-#include "../external/glad/include/glad/glad.h"
 #include "Renderer.h"
 #include <iostream>
 
 Renderer::Renderer() {
-    initWindow();
+    // Initialize the shader, but don't create a window here
     shader = new Shader("resources/shaders/vertex_shader.glsl", "resources/shaders/fragment_shader.glsl");
 }
 
 Renderer::~Renderer() {
     delete shader;
-    delete model;
-    glfwDestroyWindow(window);
-}
-
-void Renderer::initWindow() {
-    window = glfwCreateWindow(800, 600, "Nut Enigne", nullptr, nullptr);
-    if (!window) {
-        std::cerr << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        exit(EXIT_FAILURE);
-    }
-    glfwMakeContextCurrent(window);
+    if (model) delete model;
 }
 
 void Renderer::loadModel(const std::string& modelPath) {
@@ -30,10 +18,7 @@ void Renderer::loadModel(const std::string& modelPath) {
 void Renderer::renderFrame() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     shader->use();
-    model->draw(*shader);  // Render the model with the shader
-    glfwSwapBuffers(window);
-}
-
-GLFWwindow* Renderer::getWindow() const {
-    return window;
+    if (model) {
+        model->draw(*shader);
+    }
 }
