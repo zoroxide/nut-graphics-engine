@@ -19,7 +19,7 @@ Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath) {
     if (!success) {
         char infoLog[512];
         glGetProgramInfoLog(ID, 512, nullptr, infoLog);
-        std::cerr << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+        std::cerr << "[NUT DEBUG SERVICE] ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
     } else {
         std::cout << "Shaders linked successfully\n";
     }
@@ -38,13 +38,23 @@ void Shader::setMat4(const std::string& name, const float* value) const {
 
 std::string Shader::readFile(const std::string& filePath) {
     std::ifstream file(filePath);
+    if (!file.is_open()) {
+        std::cerr << "[NUT DEBUG SERVICE] Failed to open shader file: " << filePath << std::endl;
+        return "";
+    }
+    
     std::stringstream buffer;
     buffer << file.rdbuf();
     return buffer.str();
 }
 
-GLuint Shader::compileShader(GLenum typee, const std::string& source) {
-    GLuint shader = glCreateShader(typee);
+GLuint Shader::compileShader(GLenum type, const std::string& source) {
+    if (source.empty()) {
+        std::cerr << "[NUT DEBUG SERVICE] ERROR::SHADER::COMPILATION_FAILED: Shader source is empty" << std::endl;
+        return 0;
+    }
+
+    GLuint shader = glCreateShader(type);
     const char* src = source.c_str();
     glShaderSource(shader, 1, &src, nullptr);
     glCompileShader(shader);
@@ -54,8 +64,9 @@ GLuint Shader::compileShader(GLenum typee, const std::string& source) {
     if (!success) {
         char infoLog[512];
         glGetShaderInfoLog(shader, 512, nullptr, infoLog);
-        std::cerr << "ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << std::endl;
+        std::cerr << "[NUT DEBUG SERVICE] ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
 
     return shader;
 }
+

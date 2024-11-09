@@ -12,15 +12,19 @@ Engine::Engine() : model(nullptr), renderer(nullptr), shader(nullptr), window(nu
     shader = new Shader("src/shaders/vertex_shader.glsl", "src/shaders/fragment_shader.glsl");
 }
 
+Engine::~Engine() {
+    // TODO: Clean-up code, if any
+}
+
 void Engine::init() {
     if (!glfwInit()) {
-        std::cerr << "Failed to initialize GLFW" << std::endl;
+        std::cerr << "[NUT DEBUG SERVICE] Failed to initialize GLFW" << std::endl;
         exit(EXIT_FAILURE);
     }
 
     window = glfwCreateWindow(800, 600, "OpenGL Engine", nullptr, nullptr);
     if (!window) {
-        std::cerr << "Failed to create GLFW window" << std::endl;
+        std::cerr << "[NUT DEBUG SERVICE] Failed to create GLFW window" << std::endl;
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
@@ -28,7 +32,7 @@ void Engine::init() {
 
     // Load OpenGL functions using GLAD
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cerr << "Failed to initialize GLAD" << std::endl;
+        std::cerr << "[NUT DEBUG SERVICE] Failed to initialize GLAD" << std::endl;
         exit(EXIT_FAILURE);
     }
 }

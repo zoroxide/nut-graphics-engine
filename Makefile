@@ -11,6 +11,7 @@ TARGET = build/app
 $(TARGET): $(SOURCES)
 	mkdir -p build
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SOURCES) $(LDFLAGS)
+	./$(TARGET)
 
 clean:
 	rm -rf build

@@ -1,9 +1,8 @@
 #include "Renderer.h"
-#include <iostream>
 
 Renderer::Renderer() {
     // Initialize the shader, but don't create a window here
-    shader = new Shader("resources/shaders/vertex_shader.glsl", "resources/shaders/fragment_shader.glsl");
+    shader = new Shader("../resources/shaders/vertex_shader.glsl", "../resources/shaders/fragment_shader.glsl");
 }
 
 Renderer::~Renderer() {
