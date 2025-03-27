@@ -11,7 +11,7 @@ void Model::loadModel(const std::string& path) {
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
     std::string warn, err;
-    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, path.c_str())) {
+    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, path.c_str(), nullptr, true)) {
         std::cerr << "[NUT DEBUG SERVICE] : Failed to load model: " << warn<< " " << err << std::endl;
         return;
     }
