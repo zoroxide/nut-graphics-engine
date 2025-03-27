@@ -1,10 +1,10 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#include "Renderer.h"
+#include "Camera.h"
 #include "Shader.h"
 #include "Model.h"
-#include "../external/glfw/include/GLFW/glfw3.h"
+#include <GLFW/glfw3.h>
 
 class Engine {
 public:
@@ -13,11 +13,16 @@ public:
     void render(const std::string& modelPath);
 
 private:
-    Shader* shader = nullptr;
-    Model* model = nullptr; // Start as nullptr
     GLFWwindow* window;
-    Renderer* renderer;
+    Camera camera;
+    float lastX, lastY;
+    bool firstMouse;
+
     void init();
+    void processInput();
+
+    static void mouseCallback(GLFWwindow* window, double xpos, double ypos);
+    static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 };
 
 #endif

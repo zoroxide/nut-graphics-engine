@@ -11,6 +11,7 @@ public:
     Shader(const std::string& vertexPath, const std::string& fragmentPath);
     void use() const;
     void setMat4(const std::string& name, const float* value) const;
+    void checkCompileErrors(unsigned int shader, std::string type);
 
 private:
     std::string readFile(const std::string& filePath);

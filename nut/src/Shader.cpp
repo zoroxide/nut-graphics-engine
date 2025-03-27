@@ -70,3 +70,21 @@ GLuint Shader::compileShader(GLenum type, const std::string& source) {
     return shader;
 }
 
+void Shader::checkCompileErrors(unsigned int shader, std::string type) {
+    int success;
+    char infoLog[1024];
+    if (type != "PROGRAM") {
+        glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+        if (!success) {
+            glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+            std::cerr << "[NUT DEBUG SERVICE] Shader Compilation Error (" << type << "): " << infoLog << std::endl;
+        }
+    } else {
+        glGetProgramiv(shader, GL_LINK_STATUS, &success);
+        if (!success) {
+            glGetProgramInfoLog(shader, 1024, NULL, infoLog);
+            std::cerr << "[NUT DEBUG SERVICE] Program Linking Error: " << infoLog << std::endl;
+        }
+    }
+}
+
